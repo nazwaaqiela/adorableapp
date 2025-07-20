@@ -469,50 +469,50 @@ def analisis_topik():
     
     with tab_neg:
         datanegatif = [
-            [1, 'Kelupas, jahit, kulit_ngelupas, pas, robek, jebol, tumit_sakit, kena_air, rapi, kualitas'],
-            [2, 'Lem_rapi, kecil, kualitas, lem, ukur, beda, kaki, sakit_dipakenya, pinggir, sesuai'],
-            [3, 'Berat, nyaman, kaki, lecet, jalan, lepas, kaos_kaki, nyaman_jalan, pas, besar'],
-            [4, 'Kecil_ukur, ukur_kecil, sesuai, kaki_lecet, berat_keras, jahit_lepas, ukur, rusak, pilih, ribet'],
-            [5, 'Sakit, kulit, lecet, sol_berat, jalan, upper, pas, kaki, bagus, coba'],
-            [6, 'Lem_buka, kecewa, sol, lem, ukur, rapi, sedih, lubang, produk, ngelopek'],
-            [7, 'Nyaman, sol_buka, kaki_lecet, aksesoris, jalan, kaki_sakit, kotor, kulit_kelupas, paku, ok'],
-            [8, 'Nyaman, keras, rusak, lecet, kaki, kecewa, kardus, pas, produk, empuk'],
-            [9, 'Nyaman, sakit, tali, pas, belah, lepas, kecil, keras, sol, ukur_ngepas'],
-            [10, 'Ukur, sempit, kaki, lebar, cukup, tali, pas, lepas, warna, kurang'],
-            [11, 'Sakit_kaki, pas, bagus, tali_putus, minggu, produk, jalan, upper_kelupas, kualitas, lem'],
-            [12, 'Lecet, pas, tali, kaki, sol_lepas, jalan_sakit, warna, jalan, tumit, kulit'],
-            [13, 'Sandal, nyaman, buka, kaku, langsung, berat, jalan, pas, ukur, belah']
+            ['Topik #1', 'kelupas', 'jahit', 'kulit_ngelupas', 'pas', 'robek', 'jebol', 'tumit_sakit', 'kena_air', 'rapi', 'kualitas'],
+            ['Topik #2', 'lem_rapi', 'kecil', 'kualitas', 'lem', 'ukur', 'beda', 'kaki', 'sakit_dipakenya', 'pinggir', 'sesuai'],
+            ['Topik #3', 'berat', 'nyaman', 'kaki', 'lecet', 'jalan', 'lepas', 'kaos_kaki', 'nyaman_jalan', 'pas', 'besar'],
+            ['Topik #4', 'kecil_ukur', 'ukur_kecil', 'sesuai', 'kaki_lecet', 'berat_keras', 'jahit_lepas', 'ukur', 'rusak', 'pilih', 'ribet'],
+            ['Topik #5', 'sakit', 'kulit', 'lecet', 'sol_berat', 'jalan', 'upper', 'pas', 'kaki', 'bagus', 'coba'],
+            ['Topik #6', 'lem_buka', 'kecewa', 'sol', 'lem', 'ukur', 'rapi', 'sedih', 'lubang', 'produk', 'ngelopek'],
+            ['Topik #7', 'nyaman', 'sol_buka', 'kaki_lecet', 'aksesoris', 'jalan', 'kaki_sakit', 'kotor', 'kulit_kelupas', 'paku', 'ok'],
+            ['Topik #8', 'nyaman', 'keras', 'rusak', 'lecet', 'kaki', 'kecewa', 'kardus', 'pas', 'produk', 'empuk'],
+            ['Topik #9', 'nyaman', 'sakit', 'tali', 'pas', 'belah', 'lepas', 'kecil', 'keras', 'sol', 'ukur_ngepas'],
+            ['Topik #10', 'ukur', 'sempit', 'kaki', 'lebar', 'cukup', 'tali', 'pas', 'lepas', 'warna', 'kurang'],
+            ['Topik #11', 'sakit_kaki', 'pas', 'bagus', 'tali_putus', 'minggu', 'produk', 'jalan', 'upper_kelupas', 'kualitas', 'lem'],
+            ['Topik #12', 'lecet', 'pas', 'tali', 'kaki', 'sol_lepas', 'jalan_sakit', 'warna', 'jalan', 'tumit', 'kulit'],
+            ['Topik #13', 'sandal', 'nyaman', 'buka', 'kaku', 'langsung', 'berat', 'jalan', 'pas', 'ukur', 'belah']
         ]
     
-        df_negatif = pd.DataFrame(datanegatif, columns=["Topik", "Kata Kunci"])
-        
+        df_negatif = pd.DataFrame(datanegatif, columns=["Topik", "Kata 1", "Kata 2", "Kata 3", "Kata 4", "Kata 5", "Kata 6", "Kata 7", "Kata 8", "Kata 9", "Kata 10"])
+
         st.dataframe(df_negatif)
     
     with tab_net:
         datanetral = [
-            [1, 'Bagus, nyaman, empuk, lecet, sandal, kaos_kaki, pas_kaki, penyok, tipis, juga'],
-            [2, 'Sempit, pas, bagus, suka, naik_ukur, nyaman, ukur_kecil, empuk, besar, dus_penyok'],
-            [3, 'Kecil, bagus, sendal, tali, saran, packingnya, tingkat, sandal, putus, sandal_bagus'],
-            [4, 'Bagus, nyaman, berat, gede, boots, kaki, cocok_kaki, ukur, sempit, lucu'],
-            [5, 'Bagus, tali, kecil, ukur, pas, ukur_pas, ok, berat, empuk, awet'],
-            [6, 'Ukur, kaki, nyaman, besar, produk, kaki_lebar, bagus, pas, ngepas, ukur_pas'],
-            [7, 'Lebar, bagus, pesan, longgar, model, ukur, besar, kaki, nyaman, sendal'],
-            [8, 'Besar, bagus, ukur, pas, jalan, nyaman, berat, kecil, longgar, ukur_pas'],
-            [9, 'Bagus, sakit, kecil, nyaman, pas, lumayan, langganan, licin, tali, besar']
+            ['Topik #1', 'bagus', 'nyaman', 'empuk', 'lecet', 'sandal', 'kaos_kaki', 'pas_kaki', 'penyok', 'tipis', 'juga'],
+            ['Topik #2', 'sempit', 'pas', 'bagus', 'suka', 'naik_ukur', 'nyaman', 'ukur_kecil', 'empuk', 'besar', 'dus_penyok'],
+            ['Topik #3', 'kecil', 'bagus', 'sendal', 'tali', 'saran', 'packingnya', 'tingkat', 'sandal', 'putus', 'sandal_bagus'],
+            ['Topik #4', 'bagus', 'nyaman', 'berat', 'gede', 'boots', 'kaki', 'cocok_kaki', 'ukur', 'sempit', 'lucu'],
+            ['Topik #5', 'bagus', 'tali', 'kecil', 'ukur', 'pas', 'ukur_pas', 'ok', 'berat', 'empuk', 'awet'],
+            ['Topik #6', 'ukur', 'kaki', 'nyaman', 'besar', 'produk', 'kaki_lebar', 'bagus', 'pas', 'ngepas', 'ukur_pas'],
+            ['Topik #7', 'lebar', 'bagus', 'pesan', 'longgar', 'model', 'ukur', 'besar', 'kaki', 'nyaman', 'sendal'],
+            ['Topik #8', 'besar', 'bagus', 'ukur', 'pas', 'jalan', 'nyaman', 'berat', 'kecil', 'longgar', 'ukur_pas'],
+            ['Topik #9', 'bagus', 'sakit', 'kecil', 'nyaman', 'pas', 'lumayan', 'langganan', 'licin', 'tali', 'besar']
         ]
         
-        df_netral = pd.DataFrame(datanetral, columns=["Topik", "Kata Kunci"])
+        df_netral = pd.DataFrame(datanetral, columns=["Topik", "Kata 1", "Kata 2", "Kata 3", "Kata 4", "Kata 5", "Kata 6", "Kata 7", "Kata 8", "Kata 9", "Kata 10"])
 
         st.dataframe(df_netral)
     
     with tab_pos:
         datapositif = [
-            [1, 'Bagus, enak, ukur, suka, nyaman, empuk, pas, lucu, gemas, kualitas_bagis'],
-            [2, 'Nyaman, bagus, empuk, kaki, cantik, lucu, ukur_pas, empuk_nyaman, pas, cakep'],
-            [3, 'Suka, ukur_pas, bahan, sol_empuk, empuk, bagus, nyaman_jalan, model, makasih, suka_model']
+            ['Topik #1', 'bagus', 'enak', 'ukur', 'suka', 'nyaman', 'empuk', 'pas', 'lucu', 'gemas', 'kualitas_bagis'],
+            ['Topik #2', 'nyaman', 'bagus', 'empuk', 'kaki', 'cantik', 'lucu', 'ukur_pas', 'empuk_nyaman', 'pas', 'cakep'],
+            ['Topik #3', 'suka', 'ukur_pas', 'bahan', 'sol_empuk', 'empuk', 'bagus', 'nyaman_jalan', 'model', 'makasih', 'suka_model']
         ]
         
-        df_positif = pd.DataFrame(datapositif, columns=["Topik", "Kata Kunci"])
+        df_positif = pd.DataFrame(datapositif, columns=["Topik", "Kata 1", "Kata 2", "Kata 3", "Kata 4", "Kata 5", "Kata 6", "Kata 7", "Kata 8", "Kata 9", "Kata 10"])
         
         st.dataframe(df_positif)
 
