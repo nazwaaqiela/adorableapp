@@ -475,7 +475,7 @@ def analisis_topik():
         st.warning("⚠ Silakan upload dan bersihkan data terlebih dahulu.")
         return
 
-    st.success("Sentimen berhasil diprediksi!")
+    st.success("Analisis topik berhasil dibuat!")
     
     st.subheader("Topik Berdasarkan Sentimen")
 
