@@ -474,6 +474,9 @@ def analisis_topik():
     if "df" not in st.session_state or "Ulasan_Tokenized" not in st.session_state.df.columns:
         st.warning("⚠ Silakan upload dan bersihkan data terlebih dahulu.")
         return
+
+    st.success("Sentimen berhasil diprediksi!")
+    
     st.subheader("Topik Berdasarkan Sentimen")
 
     tab_neg, tab_net, tab_pos = st.tabs(["**Negatif**", "**Netral**", "**Positif**"])
