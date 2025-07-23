@@ -55,117 +55,113 @@ def upload_data():
     if uploaded_file is not None:
         try:
             df = pd.read_excel(uploaded_file)
-
             st.session_state.df = df
 
             st.subheader("Informasi Dataset")
             st.write(f"Jumlah baris: {df.shape[0]}")
             st.write(f"Jumlah kolom: {df.shape[1]}")
 
-            missing = df.isnull().sum()
-            missing_cols = missing[missing > 0]
-            if not missing_cols.empty:
-                st.write("Missing values per kolom:")
-                st.dataframe(missing_cols)
+            if "Ulasan" not in df.columns:
+                st.error("Kolom 'Ulasan' tidak ditemukan dalam data.")
+            else:
+                missing = df.isnull().sum()
+                missing_cols = missing[missing > 0]
+                if not missing_cols.empty:
+                    st.write("Missing values per kolom:")
+                    st.dataframe(missing_cols)
 
-                if st.button("Hapus Missing Values"):
-                    df = df.dropna()
-                    st.success("Missing values berhasil dihapus!")
-            else:
-                st.write("Tidak ada missing values.")
+                    if st.button("Hapus Missing Values"):
+                        df = df.dropna()
+                        st.success("Missing values berhasil dihapus!")
+
+                dup_count = df.duplicated().sum()
+                if dup_count > 0:
+                    st.write(f"Jumlah baris duplikat: {dup_count}")
+                    if st.checkbox("Tampilkan baris duplikat"):
+                        st.dataframe(df[df.duplicated()])
+
+                    if st.button("Hapus Duplikat"):
+                        df = df.drop_duplicates()
+                        st.success("Duplikat berhasil dihapus!")
+
+                st.write("Tipe Data per Kolom:")
+                st.dataframe(df.dtypes.astype(str))
+
+                st.write("10 Data Teratas")
+                st.dataframe(df.head(10))
+
+                status_placeholder = st.empty()
+                status_placeholder.write("Memproses pembersihan teks...")
+
+                kamus_slang_path = "kamus_slang.xlsx"
+                stopwords_path = "stopwords.xlsx"
             
-            dup_count = df.duplicated().sum()
-            if dup_count > 0:
-                st.write(f"Jumlah baris duplikat: {dup_count}")
-                if st.checkbox("Tampilkan baris duplikat"):
-                    st.dataframe(df[df.duplicated()])
+                try:
+                    kamus_slang_df = pd.read_excel(kamus_slang_path)
+                    stopwords_df = pd.read_excel(stopwords_path)
                 
-                if st.button("Hapus Duplikat"):
-                    df = df.drop_duplicates()
-                    st.success("Duplikat berhasil dihapus!")
-            else:
-                st.write("Tidak ada baris duplikat.")
+                    kamus_slang = dict(zip(kamus_slang_df["slang"], kamus_slang_df["formal"]))
+                    list_stopwords = set(stopwords_df["stopword"])
+                except Exception as e:
+                    st.error(f"Error loading files: {e}")
+                
+                kata_hapus = {'nya', 'ya', 'sih', 'banget', 'gitu', 'deh', 'huhu', 'sayang', 'kali', 'wkwk', 'eh', 'ku', 'kak', 'adorable', 'sepatu', 'pakai', 'sih', 'dah', 'moga', 'semoga', 'x', 'projects', 'beli', 'pokok'}
             
-            st.write("Tipe Data per Kolom:")
-            st.dataframe(df.dtypes.astype(str))
+                factory = StemmerFactory()
+                stemmer = factory.create_stemmer()
             
-            st.write("10 Data Teratas")
-            st.dataframe(df.head(10))
+                # Step 1 - cleaning karakter, huruf berulang, spasi
+                def clean_text(text):
+                    text = re.sub(r'[^a-z\s]', '', str(text), flags=re.IGNORECASE)
+                    text = re.sub(r'\s+', ' ', text).strip()
+                    text = re.sub(r'(.)\1{2,}', r'\1\1', text)
+                    return text.lower()
+            
+                # Step 2 - ganti slang
+                def replace_slang(text):
+                    words = text.split()
+                    return ' '.join([kamus_slang.get(w, w) for w in words])
+            
+                # Step 3 - hapus stopwords
+                def remove_stopwords(text):
+                    words = text.split()
+                    return ' '.join([w for w in words if w not in list_stopwords])
+            
+                # Step 4 - stemming
+                def apply_stemming(text):
+                    return stemmer.stem(text)
+            
+                # Step 5 - hapus noise
+                def remove_noise(text):
+                    words = text.split()
+                    return ' '.join([w for w in words if w not in kata_hapus])
+            
+                # Step 6 - tokenisasi
+                def tokenize(text):
+                    return text.split()
+            
+                if "Ulasan" not in df.columns:
+                    st.error("Kolom 'Ulasan' tidak ditemukan dalam data.")
+                    return
+
+                df["Ulasan_Cleaned"] = df["Ulasan"].apply(clean_text)
+                df["Ulasan_Normalized"] = df["Ulasan_Cleaned"].apply(replace_slang)
+                df["Ulasan_Removed"] = df["Ulasan_Normalized"].apply(remove_stopwords)
+                df["Ulasan_Stemmed"] = df["Ulasan_Removed"].apply(apply_stemming)
+                df["Ulasan_Stemmed2"] = df["Ulasan_Stemmed"].apply(remove_noise)
+                df["Ulasan_Tokenized"] = df["Ulasan_Stemmed2"].apply(tokenize)
+
+                status_placeholder.empty()
+                st.success("Teks berhasil dibersihkan!")
+
+                st.subheader("Cuplikan Hasil Pembersihan Data")
+                st.dataframe(df["Ulasan_Tokenized"].head())
 
         except Exception as e:
             st.error(f"Gagal membaca file Excel: {e}")
 
     else:
         st.write("Silakan unggah file terlebih dahulu.")
-
-    kamus_slang_path = "kamus_slang.xlsx"
-    stopwords_path = "stopwords.xlsx"
-
-    try:
-        kamus_slang_df = pd.read_excel(kamus_slang_path)
-        stopwords_df = pd.read_excel(stopwords_path)
-    
-        kamus_slang = dict(zip(kamus_slang_df["slang"], kamus_slang_df["formal"]))
-        list_stopwords = set(stopwords_df["stopword"])
-    except Exception as e:
-        st.error(f"Error loading files: {e}")
-    
-    kata_hapus = {'nya', 'ya', 'sih', 'banget', 'gitu', 'deh', 'huhu', 'sayang', 'kali', 'wkwk', 'eh', 'ku', 'kak', 'adorable', 'sepatu', 'pakai', 'sih', 'dah', 'moga', 'semoga', 'x', 'projects', 'beli', 'pokok'}
-
-    factory = StemmerFactory()
-    stemmer = factory.create_stemmer()
-
-    # Step 1 - cleaning karakter, huruf berulang, spasi
-    def clean_text(text):
-        text = re.sub(r'[^a-z\s]', '', str(text), flags=re.IGNORECASE)
-        text = re.sub(r'\s+', ' ', text).strip()
-        text = re.sub(r'(.)\1{2,}', r'\1\1', text)
-        return text.lower()
-
-    # Step 2 - ganti slang
-    def replace_slang(text):
-        words = text.split()
-        return ' '.join([kamus_slang.get(w, w) for w in words])
-
-    # Step 3 - hapus stopwords
-    def remove_stopwords(text):
-        words = text.split()
-        return ' '.join([w for w in words if w not in list_stopwords])
-
-    # Step 4 - stemming
-    def apply_stemming(text):
-        return stemmer.stem(text)
-
-    # Step 5 - hapus noise
-    def remove_noise(text):
-        words = text.split()
-        return ' '.join([w for w in words if w not in kata_hapus])
-
-    # Step 6 - tokenisasi
-    def tokenize(text):
-        return text.split()
-
-    if "Ulasan" not in df.columns:
-        st.error("Kolom 'Ulasan' tidak ditemukan dalam data.")
-        return
-
-    status_placeholder = st.empty()
-    status_placeholder.write("Memproses pembersihan teks...")
-
-    df["Ulasan_Cleaned"] = df["Ulasan"].apply(clean_text)
-    df["Ulasan_Normalized"] = df["Ulasan_Cleaned"].apply(replace_slang)
-    df["Ulasan_Removed"] = df["Ulasan_Normalized"].apply(remove_stopwords)
-    df["Ulasan_Stemmed"] = df["Ulasan_Removed"].apply(apply_stemming)
-    df["Ulasan_Stemmed2"] = df["Ulasan_Stemmed"].apply(remove_noise)
-    df["Ulasan_Tokenized"] = df["Ulasan_Stemmed2"].apply(tokenize)
-
-    status_placeholder.empty()
-    st.success("Teks berhasil dibersihkan!")
-
-    # Tampilkan hasil
-    st.subheader("Cuplikan Hasil Pembersihan Data")
-    st.dataframe(df["Ulasan_Tokenized"].head())
-
 
 def exploratory_data_analysis():
     st.header("Analisis Data Eksploratori")
